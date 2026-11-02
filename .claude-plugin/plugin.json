@@ -1,0 +1,11 @@
+{
+  "name": "scribase",
+  "description": "Create and operate Scribase backends (Postgres, Auth, Storage, Realtime, Functions; works with supabase-js) from your coding agent: the Scribase MCP server plus skills for projects, RLS, auth, storage, realtime, functions, and branch-per-task.",
+  "version": "0.1.0",
+  "mcpServers": "./.mcp.json",
+  "author": {
+    "name": "Scribase"
+  },
+  "homepage": "https://docs.scribase.com/docs/agents",
+  "keywords": ["scribase", "supabase-js", "postgres", "mcp", "rls", "database", "backend"]
+}

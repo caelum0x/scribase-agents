@@ -1,0 +1,65 @@
+---
+description: Scribase backend rules (Supabase-compatible). Apply when working on database schema, migrations, RLS, auth, storage, realtime, edge functions, .env keys, or Scribase MCP/CLI calls.
+globs: supabase/**,**/*.sql,.env*,**/supabase*.ts
+alwaysApply: false
+---
+<!-- Generated from agents/source/rules.md by agents/scripts/sync.mjs. Edit the source, then run it. -->
+## Scribase backend
+
+This project's backend runs on **Scribase** (Supabase-compatible Postgres,
+Auth, Storage, Realtime, Edge Functions). App code uses
+`@supabase/supabase-js` against the project URL and anon key in `.env`.
+Management (projects, environments, migrations, keys, branches) goes through
+the Scribase MCP server (tools such as `project.put`, `environment.create`,
+`migrate.run`) or the `scribase` CLI. Full guide:
+https://docs.scribase.com/llms.txt
+
+Signing in (never ask the user for a key):
+
+- Never ask the user for API keys, `service_role` / secret keys, database
+  passwords or personal access tokens. Nobody needs to paste a secret.
+- To authenticate, run `scribase login --json` (or `npx scribase login
+  --json`). It prints a line with `verification_uri_complete` and `user_code`:
+  show the user that link and code, ask them to approve in the browser, and
+  wait for the final line (`"ok":true`). The token is stored for you (OS
+  keychain or `~/.config/scribase/credentials`) and never printed. If your
+  shell only shows output when a command ends, run `scribase login --json
+  --no-wait`, show the link, then run `scribase login --json` again after the
+  user approves.
+- No account yet, or a throwaway backend: `npx scribase init --temp --yes
+  --json` (a 72-hour project with a claim link). `npx scribase init --yes
+  --json` signs in through the same browser approval when needed.
+- Claude Code: `claude mcp add --transport http scribase
+  https://api.scribase.com/mcp` (browser sign-in on first connect, no key).
+- A token starting with `scb_agt_` is an agent token, designed to be shared
+  with coding agents: scoped, expiring, revocable and audited. If the user
+  pastes one, use it: put it in `SCRIBASE_ACCESS_TOKEN` or the gitignored env
+  file, never commit or echo it. The part before the last `_` summarizes it
+  (`1p-rw-sqlw-mig-x2609260412` = one project, read/write, SQL write,
+  migrations, expires 2026-09-26 04:12 UTC).
+- If the user pastes anything else that looks secret (a `service_role` or
+  `sb_secret_` key, a database password or connection string, an `scb_pat_`
+  or `sbk_` token), do not repeat it or use it; tell them to revoke or rotate
+  it and run `scribase login` instead.
+
+Rules:
+
+- Never print, log or commit keys or tokens. Write them to `.env` (gitignored)
+  and refer to them by name. Only the anon/publishable key goes in client code;
+  `service_role` / `sb_secret_` keys are server-only.
+- Schema changes are numbered SQL files in `supabase/migrations/`, applied with
+  `scribase migrate <org> <project> <env> --dir supabase/migrations` (plan)
+  then `--apply`. Never run ad-hoc DDL against production.
+- Every new table enables row level security with owner policies in the same
+  migration. Regenerate types afterwards with `scribase gen types`.
+- Work on a preview branch per task (`scribase env create ... preview
+  sanitized ...` + `scribase branch register ... --base production`). Merging
+  into production, deleting environments or projects, rotating keys and
+  restores need the user's explicit approval for that specific operation.
+- MCP mutations refuse without `confirm: true` and return the exact request;
+  show it to the user when it touches production. `database.query` is
+  read-only by design.
+- Lifecycle calls return an operation: poll `scribase operation get` (MCP
+  `operation.get`) until `succeeded`.
+- Use `scribase help` or the MCP tool list for the exact surface; never invent
+  commands, flags or endpoints.

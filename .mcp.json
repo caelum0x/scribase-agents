@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "scribase": {
+      "type": "http",
+      "url": "https://api.scribase.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SCRIBASE_ACCESS_TOKEN}"
+      }
+    }
+  }
+}

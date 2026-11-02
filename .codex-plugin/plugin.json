@@ -1,0 +1,27 @@
+{
+  "name": "scribase",
+  "version": "0.1.0",
+  "description": "Create and operate Scribase backends (Postgres, Auth, Storage, Realtime, Functions; works with supabase-js) with the Scribase MCP server and skills.",
+  "author": {
+    "name": "Scribase",
+    "url": "https://scribase.com"
+  },
+  "homepage": "https://docs.scribase.com/docs/agents",
+  "keywords": ["scribase", "supabase-js", "postgres", "mcp", "rls", "database"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Scribase",
+    "shortDescription": "Scribase backend and MCP",
+    "longDescription": "Provision a Scribase project, write .env, create tables with row level security, wire Apple and Google sign-in, storage, realtime and edge functions, and work on a preview branch per task. Every mutating MCP tool requires explicit confirmation.",
+    "developerName": "Scribase",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://scribase.com",
+    "defaultPrompt": [
+      "Create a Scribase project for this app and write the keys to .env",
+      "Add a todos table with row level security and generate types",
+      "Open a Scribase preview branch for this task and apply my migrations there"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "scribase",
+  "metadata": {
+    "description": "The Scribase plugin for Claude Code: the hosted Scribase MCP server plus skills for projects, row-level security, auth, storage, realtime, functions and preview branches."
+  },
+  "owner": {
+    "name": "Scribase",
+    "url": "https://scribase.com"
+  },
+  "plugins": [
+    {
+      "name": "scribase",
+      "source": "./",
+      "description": "Scribase MCP server plus skills to create and operate a Scribase backend (works with supabase-js) from your coding agent."
+    }
+  ]
+}
